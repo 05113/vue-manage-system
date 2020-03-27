@@ -1,7 +1,12 @@
 <template>
     <div>
         <div class="crumbs">
+            <!-- 基础表格 -->
+            <!-- todo:跳转到首页 -->
             <el-breadcrumb separator="/">
+                <!-- <el-breadcrumb-item :to="{paht:'/'}">
+                    <i class="el-icon-lx-cascades"></i> 首页
+                </el-breadcrumb-item> -->
                 <el-breadcrumb-item>
                     <i class="el-icon-lx-cascades"></i> 基础表格
                 </el-breadcrumb-item>
@@ -22,6 +27,7 @@
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
+            
             <el-table
                 :data="tableData"
                 border
@@ -31,12 +37,16 @@
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="name" label="用户名"></el-table-column>
-                <el-table-column label="账户余额">
+                <el-table-column prop="id" label="项目id" width="55" align="center"></el-table-column>
+                <el-table-column prop="db_host" label="项目名称"></el-table-column>
+                <el-table-column prop="db_port" label="数据库主机"></el-table-column>
+                <el-table-column prop="server_host" label="服务器主机"></el-table-column>
+                <el-table-column prop="docker_domain" label="docker域名"></el-table-column>
+                <el-table-column prop="rcs_api_domain" label="rcsAPI域名"></el-table-column>
+                <!-- <el-table-column label="账户余额">
                     <template slot-scope="scope">￥{{scope.row.money}}</template>
-                </el-table-column>
-                <el-table-column label="头像(查看大图)" align="center">
+                </el-table-column> -->
+                <!-- <el-table-column label="头像(查看大图)" align="center">
                     <template slot-scope="scope">
                         <el-image
                             class="table-td-thumb"
@@ -44,25 +54,45 @@
                             :preview-src-list="[scope.row.thumb]"
                         ></el-image>
                     </template>
-                </el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
+                </el-table-column> -->
+                <!-- <el-table-column prop="address" label="地址"></el-table-column>
                 <el-table-column label="状态" align="center">
                     <template slot-scope="scope">
                         <el-tag
                             :type="scope.row.state==='成功'?'success':(scope.row.state==='失败'?'danger':'')"
                         >{{scope.row.state}}</el-tag>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
 
-                <el-table-column prop="date" label="注册时间"></el-table-column>
-                <el-table-column label="操作" width="180" align="center">
+                <!-- <el-table-column prop="date" label="注册时间"></el-table-column> -->
+                <el-table-column label="操作" width="5500" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
                             @click="handleEdit(scope.$index, scope.row)"
-                        >编辑</el-button>
+                        >编辑项目</el-button>
                         <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="handleDelete(scope.$index, scope.row)"
+                        >固定单据策略</el-button>
+                            <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="handleEdit(scope.$index, scope.row)"
+                        >单据数据</el-button>
+                            <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="handleEdit(scope.$index, scope.row)"
+                        >测试执行</el-button>
+                            <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="handleEdit(scope.$index, scope.row)"
+                        >数据备份</el-button>
+                            <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
@@ -106,12 +136,13 @@ import { fetchData } from '../../api/index';
 export default {
     name: 'basetable',
     data() {
+        console.log("aaaa")
         return {
             query: {
-                address: '',
-                name: '',
-                pageIndex: 1,
-                pageSize: 10
+                // address: '',原模板未注释
+                // name: '',原模板未注释
+                page: 1,
+                limit: 10
             },
             tableData: [],
             multipleSelection: [],
@@ -130,9 +161,11 @@ export default {
         // 获取 easy-mock 的模拟数据
         getData() {
             fetchData(this.query).then(res => {
-                console.log(res);
-                this.tableData = res.list;
-                this.pageTotal = res.pageTotal || 50;
+                console.log("aaa");
+                console.log(res.data);
+                // this.tableData = res.list;
+                this.tableData = res.data;
+                this.pageTotal = res.count || 50;
             });
         },
         // 触发搜索按钮

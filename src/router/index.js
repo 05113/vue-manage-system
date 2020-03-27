@@ -16,7 +16,7 @@ export default new Router({
             children: [
                 {
                     path: '/dashboard',
-                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
+                    component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/dashb.vue'),
                     meta: { title: '系统首页' }
                 },
                 {
@@ -25,8 +25,8 @@ export default new Router({
                     meta: { title: '自定义图标' }
                 },
                 {
-                    path: '/table',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
+                    path: '/rule',
+                    component: () => import(/* webpackChunkName: "rule" */ '../components/page/BaseTable.vue'),
                     meta: { title: '基础表格' }
                 },
                 {

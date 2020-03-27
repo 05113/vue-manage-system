@@ -5,7 +5,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">后台管理系统</div>
+        <div class="logo">WCS压测平台</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -18,7 +18,7 @@
                 <div class="btn-bell">
                     <el-tooltip
                         effect="dark"
-                        :content="message?`有${message}条未读消息`:`消息中心`"
+                        :content="message?`1有${message}条未读消息`:`消息中心`"
                         placement="bottom"
                     >
                         <router-link to="/tabs">

@@ -11,11 +11,12 @@
             router
         >
             <template v-for="item in items">
+                <!-- 有下级菜单展示 -->
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
                         <template slot="title">
                             <i :class="item.icon"></i>
-                            <span slot="title">{{ item.title }}</span>
+                            <span slot="title">{{ item.title }}1</span>
                         </template>
                         <template v-for="subItem in item.subs">
                             <el-submenu
@@ -38,8 +39,10 @@
                         </template>
                     </el-submenu>
                 </template>
+                   <!-- 无下级菜单展示 -->
                 <template v-else>
                     <el-menu-item :index="item.index" :key="item.index">
+                        <!-- 图标样式 -->
                         <i :class="item.icon"></i>
                         <span slot="title">{{ item.title }}</span>
                     </el-menu-item>
@@ -63,73 +66,79 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-cascades',
-                    index: 'table',
-                    title: '基础表格'
+                    // index: 'table',
+                    index: 'rule',
+                    title: '单据策略'
                 },
                 {
                     icon: 'el-icon-lx-copy',
                     index: 'tabs',
-                    title: 'tab选项卡'
+                    title: '固定单据'
                 },
                 {
-                    icon: 'el-icon-lx-calendar',
-                    index: '3',
-                    title: '表单相关',
-                    subs: [
-                        {
-                            index: 'form',
-                            title: '基本表单'
-                        },
-                        {
-                            index: '3-2',
-                            title: '三级菜单',
-                            subs: [
-                                {
-                                    index: 'editor',
-                                    title: '富文本编辑器'
-                                },
-                                {
-                                    index: 'markdown',
-                                    title: 'markdown编辑器'
-                                }
-                            ]
-                        },
-                        {
-                            index: 'upload',
-                            title: '文件上传'
-                        }
-                    ]
+                    icon: 'el-icon-lx-copy',
+                    index: 'tabs',
+                    title: '数据备份'
                 },
-                {
-                    icon: 'el-icon-lx-emoji',
-                    index: 'icon',
-                    title: '自定义图标'
-                },
-                {
-                    icon: 'el-icon-pie-chart',
-                    index: 'charts',
-                    title: 'schart图表'
-                },
-                {
-                    icon: 'el-icon-rank',
-                    index: '6',
-                    title: '拖拽组件',
-                    subs: [
-                        {
-                            index: 'drag',
-                            title: '拖拽列表'
-                        },
-                        {
-                            index: 'dialog',
-                            title: '拖拽弹框'
-                        }
-                    ]
-                },
-                {
-                    icon: 'el-icon-lx-global',
-                    index: 'i18n',
-                    title: '国际化功能'
-                },
+                // {
+                //     icon: 'el-icon-lx-calendar',
+                //     index: '3',
+                //     title: '表单相关',
+                //     subs: [
+                //         {
+                //             index: 'form',
+                //             title: '基本表单'
+                //         },
+                //         {
+                //             index: '3-2',
+                //             title: '三级菜单',
+                //             subs: [
+                //                 {
+                //                     index: 'editor',
+                //                     title: '富文本编辑器'
+                //                 },
+                //                 {
+                //                     index: 'markdown',
+                //                     title: 'markdown编辑器'
+                //                 }
+                //             ]
+                //         },
+                //         {
+                //             index: 'upload',
+                //             title: '文件上传'
+                //         }
+                //     ]
+                // },
+                // {
+                //     icon: 'el-icon-lx-emoji',
+                //     index: 'icon',
+                //     title: '自定义图标'
+                // },
+                // {
+                //     icon: 'el-icon-pie-chart',
+                //     index: 'charts',
+                //     title: 'schart图表'
+                // },
+                // {
+                //     icon: 'el-icon-rank',
+                //     index: '6',
+                //     title: '拖拽组件',
+                //     subs: [
+                //         {
+                //             index: 'drag',
+                //             title: '拖拽列表'
+                //         },
+                //         {
+                //             index: 'dialog',
+                //             title: '拖拽弹框'
+                //         }
+                //     ]
+                // },
+                // {
+                //     icon: 'el-icon-lx-global',
+                //     index: 'i18n',
+                //     title: '国际化功能'
+                // },
                 {
                     icon: 'el-icon-lx-warn',
                     index: '7',
@@ -181,7 +190,7 @@ export default {
     width: 0;
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
+    width: 150px;
 }
 .sidebar > ul {
     height: 100%;
