@@ -45,7 +45,7 @@
             <!-- prop对应response返回的key值 -->
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column prop="id" label="项目id" width="55" align="center"></el-table-column>
-                <el-table-column prop="db_host" label="项目名称"></el-table-column>
+                <el-table-column prop="project_name" label="项目名称"></el-table-column>
                 <el-table-column prop="db_port" label="数据库主机"></el-table-column>
                 <el-table-column prop="server_host" label="服务器主机"></el-table-column>
                 <el-table-column prop="docker_domain" label="docker域名"></el-table-column>
@@ -121,83 +121,164 @@
             </div>
         </div>
 
-        <!-- 编辑弹出框 -->
-        <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
-                <el-form-item label="用户名">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="地址">
-                    <el-input v-model="form.address"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
-            </span>
-        </el-dialog>
-            <!-- 编辑弹出新建框 -->
+        <!-- 弹出新建框 -->
         <el-dialog title="新建" :visible.sync="dialogFormVisible" width="50%">
-            <el-form ref="form" :model="project" label-width="70px">
-                <el-row>
-                    <el-col :span="8">
+            <el-form ref="form" :model="project" label-width="100px">
+                    
                         <el-form-item label="项目名称" prop="project_name">
                         <el-input v-model="project.project_name"></el-input>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
+                    
+                    
                         <el-form-item label="owner" prop="owner">
                         <el-input v-model="project.owner"></el-input>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
+                    
+                    
                         <el-form-item label="仓库id" prop="warehouse_id">
                         <el-input v-model="project.warehouse_id"></el-input>
                         </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-form-item label="数据库主机" prop="db_host">
-                    <el-input v-model="project.db_host"></el-input>
-                </el-form-item>
-                <el-form-item label="数据库端口" prop="db_port">
-                    <el-input v-model="project.db_port"></el-input>
-                </el-form-item>
-                <el-form-item label="数据库用户名" prop="db_user">
-                    <el-input v-model="project.db_user"></el-input>
-                </el-form-item>
-                <el-form-item label="数据库密码" prop="db_pwd">
-                    <el-input v-model="project.db_pwd"></el-input>
-                </el-form-item>
-                <el-form-item label="服务器主机" prop="server_host">
-                    <el-input v-model="project.server_host"></el-input>
-                </el-form-item>
-                <el-form-item label="服务器端口" prop="server_port">
-                    <el-input v-model="project.server_port"></el-input>
-                </el-form-item>
-                <el-form-item label="服务器用户名" prop="server_user">
-                    <el-input v-model="project.server_user"></el-input>
-                </el-form-item>
-                <el-form-item label="服务器密码" prop="server_pwd">
-                    <el-input v-model="project.server_pwd"></el-input>
-                </el-form-item>
-                <el-form-item label="docker域名" prop="docker_domain">
-                    <el-input v-model="project.docker_domain"></el-input>
-                </el-form-item>
-                <el-form-item label="rcsAPI域名" prop="rcs_api_domain">
-                    <el-input v-model="project.rcs_api_domain"></el-input>
-                </el-form-item>
-                <el-form-item label="station域名" prop="station_domain">
-                    <el-input v-model="project.station_domain"></el-input>
-                </el-form-item>
+                    
                 
                 
-
+                       
+                        <el-form-item label="数据库主机" prop="db_host">
+                        <el-input v-model="project.db_host"></el-input>
+                        </el-form-item>
+                    
+                     
+                        <el-form-item label="数据库端口" prop="db_port">
+                        <el-input v-model="project.db_port"></el-input>
+                        </el-form-item> 
+                    
+                     
+                        <el-form-item label="数据库用户名" prop="db_user">
+                        <el-input v-model="project.db_user"></el-input>
+                        </el-form-item>
+                    
+                    
+                        <el-form-item label="数据库密码" prop="db_pwd">
+                        <el-input v-model="project.db_pwd"></el-input>
+                        </el-form-item>
+                    
+                
+               
+                    
+                        <el-form-item label="服务器主机" prop="server_host">
+                        <el-input v-model="project.server_host"></el-input>
+                        </el-form-item>
+                    
+                    
+                        <el-form-item label="服务器端口" prop="server_port">
+                        <el-input v-model="project.server_port"></el-input>
+                        </el-form-item>
+                   
+                   
+                        <el-form-item label="服务器用户名" prop="server_user">
+                        <el-input v-model="project.server_user"></el-input>
+                        </el-form-item>
+                    
+                    
+                        <el-form-item label="服务器密码" prop="server_pwd">
+                        <el-input v-model="project.server_pwd"></el-input>
+                        </el-form-item>
+                    
+                
+                
+                    
+                        <el-form-item label="docker域名" prop="docker_domain">
+                        <el-input v-model="project.docker_domain"></el-input>
+                        </el-form-item>
+                    
+                    
+                        <el-form-item label="rcsAPI域名" prop="rcs_api_domain">
+                        <el-input v-model="project.rcs_api_domain"></el-input>
+                        </el-form-item>
+                    
+                    
+                        <el-form-item label="station域名" prop="station_domain">
+                        <el-input v-model="project.station_domain"></el-input>
+                        </el-form-item>
+                    
+                
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="submitForm">确 定</el-button>
             </span>
         </el-dialog>
+            <!-- 编辑弹出编辑框 -->
+        <el-dialog title="编辑" :visible.sync="editVisible" width="50%">
+            <el-form ref="form" :model="project" label-width="100px">
+                
+                        <el-form-item label="项目名称" prop="project_name">
+                        <el-input v-model="project.project_name"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="owner" prop="owner">
+                        <el-input v-model="project.owner"></el-input>
+                        </el-form-item>
+          
+                        <el-form-item label="仓库id" prop="warehouse_id">
+                        <el-input v-model="project.warehouse_id"></el-input>
+                        </el-form-item>
+                    
+               
+                        <el-form-item label="数据库主机" prop="db_host">
+                        <el-input v-model="project.db_host"></el-input>
+                        </el-form-item>
+                   
+                        <el-form-item label="数据库端口" prop="db_port">
+                        <el-input v-model="project.db_port"></el-input>
+                        </el-form-item> 
+                     
+                        <el-form-item label="数据库用户名" prop="db_user">
+                        <el-input v-model="project.db_user"></el-input>
+                        </el-form-item>
+                    
+                        <el-form-item label="数据库密码" prop="db_pwd">
+                        <el-input v-model="project.db_pwd"></el-input>
+                        </el-form-item>
+                    
+            
+                    
+                        <el-form-item label="服务器主机" prop="server_host">
+                        <el-input v-model="project.server_host"></el-input>
+                        </el-form-item>
+                    
+                   
+                        <el-form-item label="服务器端口" prop="server_port">
+                        <el-input v-model="project.server_port"></el-input>
+                        </el-form-item>
+                    
+                    
+                        <el-form-item label="服务器用户名" prop="server_user">
+                        <el-input v-model="project.server_user"></el-input>
+                        </el-form-item>
+                   
+                        <el-form-item label="服务器密码" prop="server_pwd">
+                        <el-input v-model="project.server_pwd"></el-input>
+                        </el-form-item>
+                   
+               
+                        <el-form-item label="docker域名" prop="docker_domain">
+                        <el-input v-model="project.docker_domain"></el-input>
+                        </el-form-item>
+                   
+                        <el-form-item label="rcsAPI域名" prop="rcs_api_domain">
+                        <el-input v-model="project.rcs_api_domain"></el-input>
+                        </el-form-item>
+                    
+                        <el-form-item label="station域名" prop="station_domain">
+                        <el-input v-model="project.station_domain"></el-input>
+                        </el-form-item>
+                    
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editSubmitForm">确 定</el-button>
+            </span>
+        </el-dialog> 
     </div>
 </template>
 
@@ -205,6 +286,9 @@
 //引用此文件目录的方法
 import { fetchData } from '../../api/index';
 import { subData } from '../../api/index';
+import {getDataById} from '../../api/index';
+import {edit_project} from '../../api/index';
+import {del_project} from '../../api/index';
 export default {
     name: 'basetable',
     data() {
@@ -231,6 +315,9 @@ export default {
                     warehouse_id:"",
                     owner:""              
             },
+            project_id:{
+                id:""
+            },
             tableData: [],
             multipleSelection: [],
             dialogFormVisible: false,
@@ -239,7 +326,8 @@ export default {
             pageTotal: 0,
             form: {},
             idx: -1,
-            id: -1
+            id1: -1,
+            dailogTitleType:"",
         };
     },
     created() {
@@ -250,8 +338,8 @@ export default {
         getData() {
             fetchData(this.query).then(res => {
                 console.log(res.data);
-                // this.tableData = res.list;
                 this.tableData = res.data;
+                console.log('getData()',this.tableData)
                 this.pageTotal = res.count || 50;
             });
         },
@@ -262,18 +350,32 @@ export default {
         },
         // 删除操作
         handleDelete(index, row) {
+
             // 二次确认删除
             this.$confirm('确定要删除吗？', '提示', {
                 type: 'warning'
             })
                 .then(() => {
+                    //通过row获取form数据
+                    this.form = row
+                    console.log("del:form_id,",this.form.id)                  
+                    this.project_id.id = this.form.id
+                    console.log("del:",this.project_id)
+                    del_project(this.project_id).then(res =>{
+                    // console.log(res.code)
+                    // this.project = res.msg
+                    // console.log("del project",this.project)
+                    this.getData()
+            });
                     this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
+                    //eltable减少一行
+                    // this.tableData.splice(index, 1);
                 })
                 .catch(() => {});
         },
         // 多选操作
         handleSelectionChange(val) {
+            console.log("xinxi:" ,val)
             this.multipleSelection = val;
         },
         delAllSelection() {
@@ -291,7 +393,16 @@ export default {
             this.idx = index;
             this.form = row;
             this.editVisible = true;
+            this.project_id.id = this.form.id
+            // console.log("projectId",this.project_id.id)
+            getDataById(this.project_id).then(res =>{
+                // console.log(res.code)
+                this.project = res.msg[0]
+                console.log("project",this.project)
+            });
+            // const _selectData = this.$refs.itsmDataTable.selection
         },
+        
         //新建操作,弹出对话框
         // 首先定义dialogFormVisible为false，通过事件触发方法改为true
         addProject(){
@@ -325,11 +436,30 @@ export default {
                 if(res.code == '201'){
                     this.open(res.err_detail)
                 }
+                   if(res.code =='200'){
+                    this.dialogFormVisible = false
+                    this.$message.success(`添加成功`);
+                    this.getData()
+                }
             }).catch();
-
              this.dialogFormVisible = false
              this.getData()
+        },
+        editSubmitForm(){     
+            edit_project(this.project).then(res => {
+                if(res.code == '201'){
+                    this.open(res.err_detail)
+                }
+                if(res.code =='200'){
+                    this.editVisible = false
+                    this.$message.success(`修改第 ${this.idx + 1} 行成功`);
+                    this.getData()
+                }
+            }).catch();
+            // this.$set(this.tableData, this.idx, this.form);
+            //调用请求异步调用 如果getData放在外面  会控制不住请求顺序 this.getData()  放开后会在editoptions后发送个请求，但response得到的内容还是之前的请求内容，然后在发送个editPost请求
         }
+
     }
 };
 </script>

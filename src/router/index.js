@@ -26,13 +26,13 @@ export default new Router({
                 },
                 {
                     path: '/rule',
-                    component: () => import(/* webpackChunkName: "rule" */ '../components/page/BaseTable.vue'),
-                    meta: { title: '基础表格' }
+                    component: () => import(/* webpackChunkName: "rule" */ '../components/page/rule.vue'),
+                    meta: { title: '订单策略' }
                 },
                 {
-                    path: '/tabs',
-                    component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
-                    meta: { title: 'tab选项卡' }
+                    path: '/data_version',
+                    component: () => import(/* webpackChunkName: "data_version" */ '../components/page/data_version.vue'),
+                    meta: { title: '固定单据' }
                 },
                 {
                     path: '/form',

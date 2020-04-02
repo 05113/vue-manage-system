@@ -72,7 +72,7 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-copy',
-                    index: 'tabs',
+                    index: 'data_version',
                     title: '固定单据'
                 },
                 {
