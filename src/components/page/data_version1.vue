@@ -14,12 +14,12 @@
         </div>
         <div class="container">
             <div class="handle-box">
-<!--                <el-button-->
-<!--                    type="primary"-->
-<!--                    icon="el-icon-delete"-->
-<!--                    class="handle-del mr10"-->
-<!--                    @click="delAllSelection"-->
-<!--                >批量删除</el-button>-->
+                <el-button
+                    type="primary"
+                    icon="el-icon-delete"
+                    class="handle-del mr10"
+                    @click="delAllSelection"
+                >批量删除</el-button>
                 <!-- <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
                     <el-option key="1" label="广东省" value="广东省"></el-option>
                     <el-option key="2" label="湖南省" value="湖南省"></el-option>
@@ -30,7 +30,7 @@
             <!-- 新增弹出界面 -->
             <div class="handle-box">
 　              <el-button type="primary" size="medium" @click="addData_version(form)">新建数据</el-button>
-            </div>
+            </div>  
             <el-table
                 :data="tableData"
                 border
@@ -40,8 +40,8 @@
                 @selection-change="handleSelectionChange"
             >
             <!-- prop对应response返回的key值 -->
-<!--                <el-table-column type="selection" width="55" align="center"></el-table-column>-->
-                <el-table-column prop="id" label="数据版本ID" align="center"></el-table-column>
+                <el-table-column type="selection" width="55" align="center"></el-table-column>
+                <el-table-column prop="id" label="数据版本ID" width="55" align="center"></el-table-column>
                 <el-table-column prop="data_version_no" label="数据版本号"></el-table-column>
                 <el-table-column prop="project_id" label="项目ID"></el-table-column>
                 <el-table-column prop="project_name" label="项目名称"></el-table-column>
@@ -49,7 +49,7 @@
                 <el-table-column prop="rule_id" label="数据生成策略id"></el-table-column>
                 <el-table-column prop="rule_name" label="数据生成策略名"></el-table-column>
                 <el-table-column prop="state" label="状态"></el-table-column>
-                <el-table-column label="操作" width="240px" align="center">
+                <el-table-column label="操作" width="550" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -84,8 +84,8 @@
         </div>
 
         <!-- 弹出新建框 -->
-        <el-dialog title="新建数据" :visible.sync="dialogFormVisible" width="30%">
-            <el-form ref="form" :model="data_version" label-width="120px">
+        <el-dialog title="新建数据" :visible.sync="dialogFormVisible" width="50%">
+            <el-form ref="form" :model="data_version" label-width="70px">
                 <el-row>
                     <el-form-item label="项目" prop="project_id">
                         <el-select v-model="data_version.project_id" filterable placeholder="请选择">
@@ -117,7 +117,7 @@
         </el-dialog>
                     <!-- 是否是集合单 -->
                     <!-- <el-col :span="8">
-                    </el-col>
+                    </el-col> 
                     <el-col :span="8">
                     </el-col>
                     <el-col :span="8">
@@ -126,7 +126,7 @@
                     </el-col>
                 </el-row>
             </el-form>
-
+            
         </el-dialog>  -->
     </div>
 </template>
@@ -162,7 +162,7 @@ export default {
                     rule_id:"",
                     rule_name:"",
                     state:"",
-                    owner:""
+                    owner:""              
             },
             data_version_id:{
                 id:""
@@ -178,7 +178,7 @@ export default {
             form: {},
             idx: -1,
             id: -1,
-            subtype: "",
+            subtype: "",    
         };
     },
     created() {
@@ -195,14 +195,14 @@ export default {
         //     }),
         //         fetchData(this.query).then(res => {
         //         this.project_count = res.count;
-        //     });
+        //     });        
         // },
         get_options(){
                 ruleData(this.query).then(res => {
                     this.options_query.limit = res.count;
                     ruleData(this.options_query).then(res =>{
                         for(let item of res.data){
-                            this.rule_options.push({"id":item.id,"rule_name":item.rule_name})
+                            this.rule_options.push({"id":item.id,"rule_name":item.rule_name})          
                         }
                     })
             }),
@@ -211,7 +211,7 @@ export default {
                     fetchData(this.options_query).then(res =>{
                         console.log("res",res)
                         for(let item of res.data){
-                            this.project_options.push({"id":item.id,"project_name":item.project_name})
+                            this.project_options.push({"id":item.id,"project_name":item.project_name})          
                         }
                         console.log("project options",this.project_options)
                     })
@@ -221,9 +221,9 @@ export default {
         getData() {
             data_versionData(this.query).then(res => {
                 this.tableData = res.data;
-                this.pageTotal = res.count || 50;
+                this.pageTotal = res.count || 50;  
                 this.get_options()
-
+                     
             });
         },
         // 触发搜索按钮
@@ -241,7 +241,7 @@ export default {
                 .then(() => {
                     //通过row获取form数据
                     this.form = row
-                    console.log("del:form_id,",this.form.id)
+                    console.log("del:form_id,",this.form.id)                  
                     this.data_version_id.id = this.form.id
                     del_data(this.data_version_id).then(res =>{
                     // console.log(res.code)
@@ -278,14 +278,14 @@ export default {
             this.rule_id.id = this.form.id
             // console.log("projectId",this.project_id.id)
             getDataById(this.rule_id).then(res =>{
-                // console.log(res.code)
+                // console.log(res.code)               
                 //typeof()查看变量类型
                 console.log("rule",res.msg[0])
                 this.rule.rule_detail = JSON.parse(res.msg[0].rule_detail)
                 this.rule.rule_name = res.msg[0].rule_name
                 this.rule.send_batch_num = res.msg[0].send_batch_num
                 this.rule.rule_type = res.msg[0].rule_type
-                this.rule.owner = res.msg[0].owner
+                this.rule.owner = res.msg[0].owner 
                 this.rule.id = res.msg[0].id
             });
             // const _selectData = this.$refs.itsmDataTable.selection
@@ -296,7 +296,7 @@ export default {
                     console.log("aaaaaaaarest")
                     this.$refs.form.resetFields();
                     }
-                })
+                })                
             },
         //新建操作,弹出对话框
         // 首先定义dialogFormVisible为false，通过事件触发方法改为true
@@ -330,15 +330,15 @@ export default {
                 subData(this.data_version).then(res => {
                     if(res.code == '201'){
                         this.open(res.err_detail)
-                        }
+                        }  
                     if(res.code =='200'){
                         this.dialogFormVisible = false
                         this.$message.success(`新增成功`);
                         this.getData()
-                    }
+                    }                    
                     }).catch();
                 }
-            if(this.subtype == 'edit'){
+            if(this.subtype == 'edit'){  
                 console.log("submutForm2",this.rule)
                 edit_rule(this.rule).then(res => {
                     if(res.code == '201'){
@@ -348,7 +348,7 @@ export default {
                     this.dialogFormVisible = false
                     this.$message.success(`修改第 ${this.idx + 1} 行成功`);
                     this.getData()
-                }
+                }   
                     }).catch();
                 }
             this.dialogFormVisible = false

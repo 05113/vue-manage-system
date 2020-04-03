@@ -20,9 +20,9 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
-                    path: '/icon',
-                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
-                    meta: { title: '自定义图标' }
+                    path: '/action',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/action.vue'),
+                    meta: { title: '测试执行' }
                 },
                 {
                     path: '/rule',
@@ -35,7 +35,7 @@ export default new Router({
                     meta: { title: '固定单据' }
                 },
                 {
-                    path: '/form',
+                    path: '/accaches',
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
                     meta: { title: '基本表单' }
                 },

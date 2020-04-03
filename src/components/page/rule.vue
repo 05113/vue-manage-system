@@ -7,23 +7,23 @@
                 <!-- <el-breadcrumb-item :to="{paht:'/'}">
                     <i class="el-icon-lx-cascades"></i> 首页
                 </el-breadcrumb-item> -->
-                <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 单据策略
-                </el-breadcrumb-item>
+<!--                <el-breadcrumb-item>-->
+<!--                    <i class="el-icon-lx-cascades"></i> 单据策略-->
+<!--                </el-breadcrumb-item>-->
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button
-                    type="primary"
-                    icon="el-icon-delete"
-                    class="handle-del mr10"
-                    @click="delAllSelection"
-                >批量删除</el-button>
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
-                </el-select>
+<!--                <el-button-->
+<!--                    type="primary"-->
+<!--                    icon="el-icon-delete"-->
+<!--                    class="handle-del mr10"-->
+<!--                    @click="delAllSelection"-->
+<!--                >批量删除</el-button>-->
+<!--                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">-->
+<!--                    <el-option key="1" label="广东省" value="广东省"></el-option>-->
+<!--                    <el-option key="2" label="湖南省" value="湖南省"></el-option>-->
+<!--                </el-select>-->
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
@@ -40,12 +40,12 @@
                 @selection-change="handleSelectionChange"
             >
             <!-- prop对应response返回的key值 -->
-                <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="id" label="策略ID" width="55" align="center"></el-table-column>
+<!--                <el-table-column type="selection" width="55" align="center"></el-table-column>-->
+                <el-table-column prop="id" label="策略ID" align="center"></el-table-column>
                 <el-table-column prop="rule_name" label="策略名"></el-table-column>
                 <el-table-column prop="rule_type" label="测试场景"></el-table-column>
                 <el-table-column prop="send_batch_num" label="发送批次"></el-table-column>
-                <el-table-column label="操作" width="550" align="center">
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -75,54 +75,62 @@
         </div>
 
         <!-- 弹出新建框 -->
-        <el-dialog title="dailogTitleType" :visible.sync="dialogFormVisible" width="50%">
-            <el-form ref="form" :model="rule" :inline="true" label-width="100px">
-                <el-form-item label="策略名" prop="rule_name">
-                <el-input v-model="rule.rule_name"></el-input>
-                </el-form-item>
-                <el-form-item label="发送批次数" prop="send_batch_num">
-                <el-input v-model="rule.send_batch_num"></el-input>
-                </el-form-item>
-                <el-form-item label="owner" prop="owner">
-                <el-input v-model="rule.owner"></el-input>
-                </el-form-item>
+        <el-dialog title="dailogTitleType" :visible.sync="dialogFormVisible" width="30%">
+            <el-form ref="form" :model="rule" :inline="true" label-width="120px">
+
+                <el-row :gutter="3" >
+                    <el-form-item label="策略名" prop="rule_name">
+                        <el-input v-model="rule.rule_name"></el-input>
+                    </el-form-item>
+                </el-row>
+                <el-row :gutter="3" >
+                    <el-form-item label="发送批次数" prop="send_batch_num">
+                        <el-input v-model="rule.send_batch_num"></el-input>
+                    </el-form-item>
+                </el-row>
+
+                <el-row :gutter="3" >
+                    <el-form-item label="owner" prop="owner">
+                        <el-input v-model="rule.owner"></el-input>
+                    </el-form-item>
+                </el-row>
                     <!-- 是否是集合单 -->
-                <el-row :gutter="3" >     
+                <el-row :gutter="3" >
                     <el-form-item label="是否集合单" prop="rule_detail.is_group">
                     <el-radio v-model="rule.rule_detail.is_group" :label=false>否</el-radio>
                     <el-radio v-model="rule.rule_detail.is_group" :label=true>是</el-radio>
-                    </el-form-item>   
-                </el-row>                      
-                <el-row :gutter="3" >      
+                    </el-form-item>
+                </el-row>
+                <el-row :gutter="3" >
                     <el-form-item label="集合单数量区间" prop="rule_detail.group_num_min">
-                    <el-input v-model="rule.rule_detail.group_num_min"></el-input>
+                    <el-input v-model="rule.rule_detail.group_num_min" style="width: 85px"></el-input>
                     </el-form-item>到
                     <el-form-item  prop="rule_detail.group_num_max">
-                    <el-input v-model="rule.rule_detail.group_num_max"></el-input>
-                    </el-form-item>      
+                    <el-input v-model="rule.rule_detail.group_num_max" style="width: 85px"></el-input>
+                    </el-form-item>
                 </el-row>
-                <el-row>       
+                <el-row>
                     <el-form-item label="出库单数量区间" prop="rule_detail.picking_num_min">
-                    <el-input v-model="rule.rule_detail.picking_num_min"></el-input>
+                    <el-input v-model="rule.rule_detail.picking_num_min" style="width: 85px"></el-input>
                     </el-form-item>到
                     <el-form-item  prop="rule_detail.picking_num_max">
-                    <el-input v-model="rule.rule_detail.picking_num_max"></el-input>
+                    <el-input v-model="rule.rule_detail.picking_num_max" style="width: 85px"></el-input>
                     </el-form-item>
                 </el-row>
                 <el-row>
                     <el-form-item label="货品数量区间" prop="rule_detail.picking_detail_num_min">
-                    <el-input v-model="rule.rule_detail.picking_detail_num_min"></el-input>
+                    <el-input v-model="rule.rule_detail.picking_detail_num_min" style="width: 85px"></el-input>
                     </el-form-item>到
                     <el-form-item  prop="rule_detail.picking_detail_num_max">
-                    <el-input v-model="rule.rule_detail.picking_detail_num_max"></el-input>
+                    <el-input v-model="rule.rule_detail.picking_detail_num_max" style="width: 85px"></el-input>
                     </el-form-item>
                 </el-row>
                 <el-row>
                     <el-form-item label="货品件数区间" prop="rule_detail.sku_num_min">
-                    <el-input v-model="rule.rule_detail.sku_num_min"></el-input>
+                    <el-input v-model="rule.rule_detail.sku_num_min" style="width: 85px"></el-input>
                     </el-form-item>到
                     <el-form-item  prop="rule_detail.sku_num_max">
-                    <el-input v-model="rule.rule_detail.sku_num_max"></el-input>
+                    <el-input v-model="rule.rule_detail.sku_num_max" style="width: 85px"></el-input>
                     </el-form-item>
                 </el-row>
             </el-form>
@@ -164,7 +172,7 @@ export default {
                         sku_num_min:"",
                         sku_num_max:"",
                     },
-                    owner:""              
+                    owner:""
             },
             rule_id:{
                 id:""
@@ -210,7 +218,7 @@ export default {
                 .then(() => {
                     //通过row获取form数据
                     this.form = row
-                    console.log("del:form_id,",this.form.id)                  
+                    console.log("del:form_id,",this.form.id)
                     this.rule_id.id = this.form.id
                     del_rule(this.rule_id).then(res =>{
                     // console.log(res.code)
@@ -248,14 +256,14 @@ export default {
             this.dailogTitleType = "编辑"
             // console.log("projectId",this.project_id.id)
             getDataById(this.rule_id).then(res =>{
-                // console.log(res.code)               
+                // console.log(res.code)
                 //typeof()查看变量类型
                 console.log("rule",res.msg[0])
                 this.rule.rule_detail = JSON.parse(res.msg[0].rule_detail)
                 this.rule.rule_name = res.msg[0].rule_name
                 this.rule.send_batch_num = res.msg[0].send_batch_num
                 this.rule.rule_type = res.msg[0].rule_type
-                this.rule.owner = res.msg[0].owner 
+                this.rule.owner = res.msg[0].owner
                 this.rule.id = res.msg[0].id
             });
             // const _selectData = this.$refs.itsmDataTable.selection
@@ -265,9 +273,9 @@ export default {
                 if (this.$refs.form !== undefined) {
                     this.$refs.form.resetFields();
                     }
-                })                
+                })
             },
-    
+
         //新建操作,弹出对话框
         // 首先定义dialogFormVisible为false，通过事件触发方法改为true
         addRule(form){
@@ -305,15 +313,15 @@ export default {
                 subData(this.rule).then(res => {
                     if(res.code == '201'){
                         this.open(res.err_detail)
-                        }  
+                        }
                     if(res.code =='200'){
                         this.dialogFormVisible = false
                         this.$message.success(`新增成功`);
                         this.getData()
-                    }                    
+                    }
                     }).catch();
                 }
-            if(this.subtype == 'edit'){  
+            if(this.subtype == 'edit'){
                 console.log("submutForm2",this.rule)
                 edit_rule(this.rule).then(res => {
                     if(res.code == '201'){
@@ -323,7 +331,7 @@ export default {
                     this.dialogFormVisible = false
                     this.$message.success(`修改第 ${this.idx + 1} 行成功`);
                     this.getData()
-                }   
+                }
                     }).catch();
                 }
             this.dialogFormVisible = false

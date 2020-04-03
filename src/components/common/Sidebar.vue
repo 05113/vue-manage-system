@@ -77,8 +77,8 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-copy',
-                    index: 'tabs',
-                    title: '数据备份'
+                    index: 'action',
+                    title: '测试执行'
                 },
                 // {
                 //     icon: 'el-icon-lx-calendar',
