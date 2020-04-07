@@ -426,7 +426,7 @@ export default {
             this.getData();
         },
         open(errdetail) {
-        this.$message(errdetail);
+        this.$message.error(errdetail);
         },
         //提交project
         //通过axios提交到后端
@@ -434,7 +434,7 @@ export default {
         submitForm(){
              subData(this.project).then(res => {
                 if(res.code == '201'){
-                    this.open(res.err_detail)
+                    this.open("检查参数"+res.msg)
                 }
                    if(res.code =='200'){
                     this.dialogFormVisible = false

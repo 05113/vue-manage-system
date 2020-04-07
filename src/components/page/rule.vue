@@ -52,6 +52,11 @@
                             icon="el-icon-edit"
                             @click="handleEdit(scope.$index, scope.row)"
                         >编辑</el-button>
+                        <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="run_Data(scope.$index, scope.row)"
+                        >生成触发</el-button>
                             <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -149,6 +154,7 @@ import { subData } from '../../api/rule';
 import {getDataById} from '../../api/rule';
 import {edit_rule} from '../../api/rule';
 import {del_rule} from '../../api/rule';
+import {run_data} from '../../api/rule';
 export default {
     name: 'basetable',
     data() {
@@ -267,6 +273,18 @@ export default {
                 this.rule.id = res.msg[0].id
             });
             // const _selectData = this.$refs.itsmDataTable.selection
+        },
+        run_Data(index,row){
+            this.rule_id.id = this.form.id
+            run_data(this.rule_id).then(res =>{
+                if(res.code='200'){
+                    this.$message.success('已提交');
+                }
+                if(res.code='201'){
+                    this.$message.error(res.msg);
+                }             
+            });
+            
         },
         resetForm(form) {
             this.$nextTick(()=>{

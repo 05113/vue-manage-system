@@ -33,5 +33,19 @@ export const del_action =action_id =>{
         data:action_id
     })
 };
+export const run_action =action_id =>{
+    return request({
+        url:'/run_action',
+        method:'post',
+        data:action_id
+    })
+};
+export const canel_action =action_id =>{
+    return request({
+        url:'/canel_action',
+        method:'post',
+        data:action_id
+    })
+};
 
 

@@ -50,7 +50,7 @@
                 <el-table-column prop="data_type" label="数据类型" :formatter="dataFormatter"></el-table-column>
                 <el-table-column prop="data_version_id" label="数据版本id"></el-table-column>
                 <el-table-column prop="data_version_no" label="数据版本号"></el-table-column>
-                <el-table-column prop="state" label="状态"></el-table-column>
+                <el-table-column prop="state" label="状态" :formatter="state_Formatter"></el-table-column>
                 <el-table-column prop="data_backup" label="是否已备份" :formatter="data_backupFormatter"></el-table-column>
                 <!-- <el-table-column prop="data_backup" label="数据备份"></el-table-column> -->
                 <el-table-column label="操作" width="550" align="center">
@@ -60,6 +60,14 @@
                             icon="el-icon-edit"
                             @click="handleEdit(scope.$index, scope.row)"
                         >详情</el-button>
+                        <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="run_Action(scope.$index, scope.row)"
+                        > {{scope.row.state == 'INIT'?'执行':(scope.row.state =='DOING'?'取消':'删除')}}
+                        </el-button>
+
+                        <!-- {{scope.row.state=='待执行'?'执行':(scope.row.state=='申请中'?'点击确认':(scope.row.state=='已退库'?'申请入库':'审核'))}} -->
                         <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -166,7 +174,8 @@ import { fetchData } from '../../api/index';
 import { ruleData } from '../../api/rule';
 import { subData } from '../../api/action';
 import {actionData} from '../../api/action'
-// import {getDataById} from '../../api/rule';
+import {run_action} from '../../api/action';
+import {canel_action} from '../../api/action';
 import {edit_action} from '../../api/action';
 import {del_action} from '../../api/action';
 export default {
@@ -229,6 +238,27 @@ export default {
         //         this.project_count = res.count;
         //     });        
         // },
+        run_Action(index,row){
+            this.action_id.id = this.form.id
+            console.log("ccccccc",row.state)
+            run_action(this.action_id).then(res =>{
+                if(res.code = '200'){
+                    this.$message.success('已提交');
+                }
+                if(res.code = '201'){
+                    this.$message.error(res.msg);
+                }
+            })
+            run_action(this.action_id).then(res =>{
+                if(res.code = '200'){
+                    this.$message.success('已提交');
+                }
+                if(res.code = '201'){
+                    this.$message.error(res.msg);
+                }
+            })
+        },
+        
         get_options(){
                 ruleData(this.query).then(res => {
                     this.options_query.limit = res.count;
@@ -381,6 +411,21 @@ export default {
             }
             else if (dt == 'FIXED'){
                 return '固定单据'
+            }
+        },
+        state_Formatter(row,column){
+            let sf = row.state
+            if (sf == 'INIT'){
+                return '待执行'
+            }
+            if (sf == 'DOING'){
+                return '待执中'
+            }
+            if(sf =='DONE'){
+                return '已完成'
+            }
+            if(sf =='CANCEL'){
+                return '已取消'
             }
         },
         data_backupFormatter(row,column){

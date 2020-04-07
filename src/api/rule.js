@@ -40,5 +40,12 @@ export const del_rule =rule_id =>{
         data:rule_id
     })
 };
+export const run_data =rule_id =>{
+    return request({
+        url:'/run_data',
+        method:'post',
+        data:rule_id
+    })
+};
 
 
