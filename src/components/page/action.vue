@@ -62,7 +62,8 @@
                         >详情</el-button>
                         <el-button
                             type="text"
-                            icon="el-icon-edit"
+                            :icon="scope.row.state == 'INIT'?'el-icon-video-play':(scope.row.state =='DOING'?'el-icon-loading':'el-icon-delete')"
+                            :style=""
                             @click="run_Action(scope.$index, scope.row)"
                         > {{scope.row.state == 'INIT'?'执行':(scope.row.state =='DOING'?'取消':'删除')}}
                         </el-button>
@@ -182,6 +183,7 @@ export default {
     name: 'basetable',
     data() {
         return {
+            iconData:'el-icon-edit',
             query: {
                 page: 1,
                 limit: 2
@@ -240,6 +242,12 @@ export default {
         // },
         run_Action(index,row){
             this.action_id.id = this.form.id
+            if(row.state == 'INIT'){
+                this.iconData = 'el-icon-video-play'
+            }
+            if(row.state == 'DOING'){
+                this.iconData = 'el-icon-video-play'
+            }
             console.log("ccccccc",row.state)
             run_action(this.action_id).then(res =>{
                 if(res.code = '200'){
