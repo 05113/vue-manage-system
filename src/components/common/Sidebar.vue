@@ -74,26 +74,35 @@ export default {
                 {
                     icon: 'el-icon-lx-calendar',
                     index: '3',
-                    title: '表单相关',
+                    title: '项目',
                     subs: [
+                        {
+                            index:'project',
+                            title:'项目管理'
+
+                        },
+                        {
+                            index:'api',
+                            title:'api管理'
+                        },
                         {
                             index: 'form',
                             title: '基本表单'
                         },
-                        {
-                            index: '3-2',
-                            title: '三级菜单',
-                            subs: [
-                                {
-                                    index: 'editor',
-                                    title: '富文本编辑器'
-                                },
-                                {
-                                    index: 'markdown',
-                                    title: 'markdown编辑器'
-                                }
-                            ]
-                        },
+                        // {
+                        //     index: '3-2',
+                        //     title: '三级菜单',
+                        //     subs: [
+                        //         {
+                        //             index: 'editor',
+                        //             title: '富文本编辑器'
+                        //         },
+                        //         {
+                        //             index: 'markdown',
+                        //             title: 'markdown编辑器'
+                        //         }
+                        //     ]
+                        // },
                         {
                             index: 'upload',
                             title: '文件上传'
@@ -107,12 +116,21 @@ export default {
                 },
                 {
                     icon: 'el-icon-pie-chart',
-                    index: 'charts',
-                    title: 'schart图表'
+                    index: '2',
+                    title: 'case管理',
+                    subs:[
+                        {
+                            index:'case',
+                            title:'case列表'
+                        },{
+                            index:'updatecase',
+                            title:'case创建'
+                        }
+                    ]
                 },
                 {
                     icon: 'el-icon-rank',
-                    index: '6',
+                    index: '9',
                     title: '拖拽组件',
                     subs: [
                         {
@@ -127,8 +145,21 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-global',
-                    index: 'i18n',
-                    title: '国际化功能'
+                    index: '4',
+                    title: '接口管理',
+                    subs:[
+                        {
+                            index:'interface_list',
+                            title:'接口列表'
+                        },{
+                            index:'interface_create',
+                            title:'接口创建'
+                        },{
+                            index:'interface_update',
+                            title:'接口修改'
+                        }
+                    ]
+                    
                 },
                 {
                     icon: 'el-icon-lx-warn',

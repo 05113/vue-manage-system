@@ -15,7 +15,7 @@
                     </el-tooltip>
                 </div>
                 <!-- 消息中心 -->
-                <!-- <div class="btn-bell">
+                <div class="btn-bell">
                     <el-tooltip
                         effect="dark"
                         :content="message?`有${message}条未读消息`:`消息中心`"
@@ -26,16 +26,6 @@
                         </router-link>
                     </el-tooltip>
                     <span class="btn-bell-badge" v-if="message"></span>
-                </div>-->
-                <div>
-                    <el-select v-model="id" placeholder="请选择" filterable @change="saveProject">
-                        <el-option
-                            v-for="item in project_options"
-                            :key="item.id"
-                            :label="item.project_name"
-                            :value="item.id"
-                        ></el-option>
-                    </el-select>
                 </div>
                 <!-- 用户头像 -->
                 <div class="user-avator">
@@ -60,18 +50,13 @@
 </template>
 <script>
 import bus from '../common/bus';
-import { get_project_listAll } from '../../api/project'
-const db = window.localStorage
 export default {
-    
     data() {
         return {
             collapse: false,
             fullscreen: false,
             name: 'linxin',
-            message: 2,
-            project_options:[],
-            id:""
+            message: 2
         };
     },
     computed: {
@@ -80,28 +65,7 @@ export default {
             return username ? username : this.name;
         }
     },
-    created() {
-        this.getData();
-    },
     methods: {
-        getData() {
-            this.id = Number(db.getItem('id'))
-            get_project_listAll().then(res => {
-                this.project_options = []
-                for(let item of res.data){
-                    this.project_options.push(
-                        {
-                        'id': item.id,
-                        'project_name': item.project_name
-                    }
-                    )
-                }
-                console.log(this.project_options)
-            });
-        },
-        saveProject(){
-            db.setItem('id',this.id)
-        },
         // 用户名下拉菜单选择事件
         handleCommand(command) {
             if (command == 'loginout') {

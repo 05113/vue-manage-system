@@ -20,14 +20,24 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
-                    path: '/icon',
-                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
-                    meta: { title: '自定义图标' }
+                    path: '/interface_create',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/TestApi.vue'),
+                    meta: { title: '单接口测试' }
                 },
                 {
-                    path: '/table',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-                    meta: { title: '基础表格' }
+                    path: '/interface_list',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/InterfaceTable.vue'),
+                    meta: { title: '接口列表'}
+                },                
+                {
+                    path: '/project',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/ProjectTable.vue'),
+                    meta: { title: '项目管理'}
+                },
+                {
+                    path: '/api',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/ApiTable.vue'),
+                    meta: { title: 'api管理' }
                 },
                 {
                     path: '/tabs',
