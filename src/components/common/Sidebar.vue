@@ -73,7 +73,7 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-calendar',
-                    index: '3',
+                    index: '5',
                     title: '项目',
                     subs: [
                         {
@@ -157,6 +157,24 @@ export default {
                         },{
                             index:'interface_update',
                             title:'接口修改'
+                        }
+                    ]
+                    
+                },
+                {
+                    icon: 'el-icon-lx-redpacket_fill',
+                    index: '3',
+                    title: '测试计划',
+                    subs:[
+                        {
+                            index:'testPlan_list',
+                            title:'计划列表'
+                        },{
+                            index:'testPlan_create',
+                            title:'计划创建'
+                        },{
+                            index:'testPlan_update',
+                            title:'计划修改'
                         }
                     ]
                     

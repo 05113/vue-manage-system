@@ -62,28 +62,34 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <!-- <el-dialog :title= subtype :visible.sync="editVisible" width="30%">
-            <el-form ref="api_entity" :model="api_entity" label-width="70px">
-                <el-form-item label="接口名称">
-                    <el-input v-model="api_entity.api_name"></el-input>
-                </el-form-item>
-                <el-form-item label="接口url">
-                    <el-input v-model="api_entity.api_url"></el-input>
-                </el-form-item>
+        <el-dialog :title= subtype :visible.sync="editVisible" width="30%">
+            <el-form ref="api_entity" :model="testplan_detail" label-width="70px">
+                <!-- <el-form-item label="接口名称">
+                    <el-input v-model="testplan_detail.test_api_id"></el-input>
+                </el-form-item> -->
+                    <el-select v-model="testplan_detail.test_api_id" placeholder="请选择" filterable >
+                        <el-option
+                            v-for="item in testApi_options"
+                            :key="item.id"
+                            :label="item.api_name"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="submitForm">确 定</el-button>
             </span>
-        </el-dialog> -->
+        </el-dialog>
     </div>
 </template>
 
 <script>
-import { get_test_api_list } from '../../api/interface';
+import { get_testPlan_listByProjectId } from '../../api/testPlan';
+import { get_testPlan_detail_list } from '../../api/testPlan_detail';
 import { run_test_api } from '../../api/test_api';
 import { run_api_list } from '../../api/api';
-import { create_api } from '../../api/api';
+import { create_testPlan_detail } from '../../api/testPlan_detail';
 import Base from '../common/Header'
 const db = window.localStorage
 
@@ -91,26 +97,22 @@ export default {
     name: 'basetable',
     data() {
         return {
+            project_id:"",
             query: {
-                page: 1,
-                limit: 10,
-                project_id:""
+                testplan_id:""
             },
             subtype:"",
             url:Base.baseURL,
             queryName:"",
             tableData: [],
+            testApi_options:[],
             multipleSelection: [],
             delList: [],
             editVisible: false,
             pageTotal: 0,
-            interface_entity: {
-                id:"",
-                api_name:"",
-                api_url:"",
-                request_json:"",
-                assert_case:""
-
+            testplan_detail: {
+                testplan_id:"",
+                test_api_id:""
             },
             idx: -1,
             id: -1,
@@ -119,16 +121,40 @@ export default {
     created() {
         this.getData();
     },
+    watch:{
+      '$route': 'getData'
+    },
     methods: {
-        getData() {
-            this.query.project_id = db.getItem("id")
-            console.log("queret",this.project_id)
+        // getParams(){
+        //     // const routerParams = this.$route.testplan.id
+        //     const routerParams = this.$route.query.id
+        //     this.query.testplan_id = routerParams
+        //     console.log("aaaaaa",routerParams)
+        // },
+        //新增 获取projectid
+        getData() {   
+            this.project_id = db.getItem('id')
+            get_testPlan_listByProjectId(this.project_id).then(res =>{
+                console.log(res)
+                this.testApi_options = []
+                for(let item of res.data){
+                    this.testApi_options.push({
+                    'id': item.id,
+                    'api_name': item.api_name
+                }) 
+                }
+               
+            })
+            this.query.testplan_id = this.$route.query.id         
             console.log("queret",this.query)
-            get_test_api_list(this.query).then(res => {
+            if(this.query.testplan_id != undefined){
+                get_testPlan_detail_list(this.query).then(res => {
                 console.log(res);
                 this.tableData = res.data;
                 this.pageTotal = res.count || 50;
             });
+            }
+
         },
         // 触发搜索按钮
         handleSearch() {
@@ -207,7 +233,8 @@ export default {
                 }).catch()
             }
             if(this.subtype === 'create'){
-                create_api(this.api_entity).then(res=>{
+                this.testplan_detail.testplan_id = this.query.testplan_id
+                create_testPlan_detail(this.testplan_detail).then(res=>{
                     console.log(res)
                     if (res.code === "200") {
                         this.$message.success(res.msg);

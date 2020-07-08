@@ -20,6 +20,26 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/testPlan_list',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/TestPlanTable.vue'),
+                    meta: { title: '测试计划列表' }
+                },
+                {
+                    path: '/testPlan_create',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/TestApi.vue'),
+                    meta: { title: '新建测试计划' }
+                },
+                {
+                    path: '/testPlan_detail',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/TestPlanDetailTable.vue'),
+                    meta: { title: '新建测试计划详情' }
+                },
+                {
+                    path: '/testPlan_update',
+                    component: () => import(/* webpackChunkName: "icon" */ '../components/page/TestApi.vue'),
+                    meta: { title: '修改测试计划' }
+                },
+                {
                     path: '/interface_create',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/TestApi.vue'),
                     meta: { title: '单接口测试' }

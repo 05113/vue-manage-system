@@ -13,10 +13,20 @@
 
 <script>
 export default {
+  created(){
+      this.getParams();
+  },
   methods: {
       goBack(){
           this.$router.go(-1);
+      },
+      getParams(){
+          const routerParams = this.$route.query.mallCode
+          console.log("aaaaaa",routerParams)
       }
+  },
+  watch:{
+      '$route': 'getParams'
   }
 }
 </script>

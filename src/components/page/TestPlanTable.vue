@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 基础表格
+                    <i class="el-icon-lx-cascades"></i> 测试计划
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -28,24 +28,28 @@
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
+                <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="api_name" label="接口名称"></el-table-column>
-                <el-table-column prop="api_url" label="接口url"></el-table-column>
-                <el-table-column prop="request_json" label="request_json"></el-table-column>
-                <el-table-column prop="assert_case" label="assert_case"></el-table-column>
+                <el-table-column prop="testplan_name" label="测试计划"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-edit"
-                            @click="run_api(scope.$index, scope.row)"
-                        >run</el-button>
+                            @click="testPlan_detail(scope.$index, scope.row)"
+                        >详情</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-delete"
                             class="red"
                             @click="handleDelete(scope.$index, scope.row)"
                         >删除1</el-button>
+                        <el-button
+                            type="text"
+                            icon="el-icon-delete"
+                            class="red"
+                            @click="add_task(scope.$index, scope.row)"
+                        >运行</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -62,28 +66,27 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <!-- <el-dialog :title= subtype :visible.sync="editVisible" width="30%">
-            <el-form ref="api_entity" :model="api_entity" label-width="70px">
-                <el-form-item label="接口名称">
-                    <el-input v-model="api_entity.api_name"></el-input>
-                </el-form-item>
-                <el-form-item label="接口url">
-                    <el-input v-model="api_entity.api_url"></el-input>
+        <el-dialog :title= subtype :visible.sync="editVisible" width="30%">
+            <el-form ref="testPlan_entity" :model="testPlan_entity" label-width="70px">
+                <el-form-item label="测试计划">
+                    <el-input v-model="testPlan_entity.testPlan_name"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
                 <el-button type="primary" @click="submitForm">确 定</el-button>
             </span>
-        </el-dialog> -->
+        </el-dialog>
     </div>
 </template>
 
 <script>
-import { get_test_api_list } from '../../api/interface';
-import { run_test_api } from '../../api/test_api';
-import { run_api_list } from '../../api/api';
-import { create_api } from '../../api/api';
+
+import { add_testPlan_task } from '../../api/testPlan';
+import { get_testPlan_list } from '../../api/testPlan';
+import { delete_api } from '../../api/api';
+import { update_api } from '../../api/api';
+import { create_testPlan } from '../../api/testPlan';
 import Base from '../common/Header'
 const db = window.localStorage
 
@@ -93,8 +96,7 @@ export default {
         return {
             query: {
                 page: 1,
-                limit: 10,
-                project_id:""
+                limit: 10
             },
             subtype:"",
             url:Base.baseURL,
@@ -104,13 +106,9 @@ export default {
             delList: [],
             editVisible: false,
             pageTotal: 0,
-            interface_entity: {
+            testPlan_entity: {
                 id:"",
-                api_name:"",
-                api_url:"",
-                request_json:"",
-                assert_case:""
-
+                testPlan_name:"",
             },
             idx: -1,
             id: -1,
@@ -121,10 +119,8 @@ export default {
     },
     methods: {
         getData() {
-            this.query.project_id = db.getItem("id")
-            console.log("queret",this.project_id)
-            console.log("queret",this.query)
-            get_test_api_list(this.query).then(res => {
+            this.query.project_id = db.getItem('id')
+            get_testPlan_list(this.query).then(res => {
                 console.log(res);
                 this.tableData = res.data;
                 this.pageTotal = res.count || 50;
@@ -160,6 +156,13 @@ export default {
             })
             .catch(() => {});
         },
+        add_task(index, row){
+            console.log("testplanid"+row.id)
+            add_testPlan_task(row.id).then(res =>{
+                console.log("aaaaa",res)
+            })
+
+        },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -174,26 +177,33 @@ export default {
             this.$message.error(`删除了${str}`);
             this.multipleSelection = [];
         },
-        // run
-        run_api(index, row) {
-            console.log("wor",row.id)
-            run_test_api(row.id).then(res =>{
-                console.log("resaaa:",res)
-                this.$message.success(res);
-            })
+        // 编辑操作
+        testPlan_detail(index, row) {
+            console.log(row.id)
             
+            this.$router.push({
+                path:'/testPlan_detail',
+                query: {
+                    id: row.id
+                    }
+            })
+            // this.subtype = 'edit'
+            // this.idx = index;
+            // this.testPlan_entity = row;
+            // this.editVisible = true;
+
         },
         //新建操作
         addApi() {
             this.subtype = 'create'
-            this.api_entity = {}
+            this.testPlan_entity = {}
             this.editVisible = true;
         },
         // 提交操作
         submitForm() {
             this.editVisible = false;
             if(this.subtype === 'edit'){
-                update_api(this.api_entity).then(res=>{
+                update_api(this.testPlan_entity).then(res=>{
                     console.log(res)
                     if (res.code === "200") {
                         this.$message.success(res.msg);
@@ -207,7 +217,8 @@ export default {
                 }).catch()
             }
             if(this.subtype === 'create'){
-                create_api(this.api_entity).then(res=>{
+                this.testPlan_entity.project_id = db.getItem('id')
+                create_testPlan(this.testPlan_entity).then(res=>{
                     console.log(res)
                     if (res.code === "200") {
                         this.$message.success(res.msg);
