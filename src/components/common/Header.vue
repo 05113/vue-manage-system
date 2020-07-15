@@ -101,6 +101,8 @@ export default {
         },
         saveProject(){
             db.setItem('id',this.id)
+            this.$store.commit('changeSearchKey',this.id)
+            // this.$store.dispatch('setSearchKey',this.id)
         },
         // 用户名下拉菜单选择事件
         handleCommand(command) {

@@ -10,6 +10,7 @@
         <div class="container">
             <div class="handle-box">
                 <el-button type="primary" size="medium" @click="addApi">新增接口</el-button>
+                <el-button type="primary" size="medium" @click="update_test_api_group">保存</el-button>
                 <div class="handle-box1">
                     <el-input
                         v-model="queryName"
@@ -26,9 +27,11 @@
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
+                row-key="id"
                 @selection-change="handleSelectionChange"
             >
-                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
+                <el-table-column label="序号" type="index" width="55" align="center"></el-table-column>
+                <!-- <el-table-column prop="id" label="序号"></el-table-column> -->
                 <el-table-column prop="api_name" label="接口名称"></el-table-column>
                 <el-table-column prop="api_url" label="接口url"></el-table-column>
                 <el-table-column prop="request_json" label="request_json"></el-table-column>
@@ -52,9 +55,9 @@
             <div class="pagination">
                 <el-pagination
                     background
-                    layout="total, prev, pager, next"
+                    layout="total"
                     :current-page="query.page"
-                    :page-size="query.limit"
+                    :page-size="pageTotal"
                     :total="pageTotal"
                     @current-change="handlePageChange"
                 ></el-pagination>
@@ -90,6 +93,11 @@ import { get_testPlan_detail_list } from '../../api/testPlan_detail';
 import { run_test_api } from '../../api/test_api';
 import { run_api_list } from '../../api/api';
 import { create_testPlan_detail } from '../../api/testPlan_detail';
+import { delete_testPlan_detail } from '../../api/testPlan_detail';
+import { update_test_api_group } from '../../api/testPlan_detail';
+
+
+import Sortable from 'sortablejs';
 import Base from '../common/Header'
 const db = window.localStorage
 
@@ -132,26 +140,49 @@ export default {
         //     console.log("aaaaaa",routerParams)
         // },
         //新增 获取projectid
-        getData() {   
-            this.project_id = db.getItem('id')
-            get_testPlan_listByProjectId(this.project_id).then(res =>{
-                console.log(res)
-                this.testApi_options = []
-                for(let item of res.data){
-                    this.testApi_options.push({
-                    'id': item.id,
-                    'api_name': item.api_name
-                }) 
+        rowDrop(){
+            const tbody = document.querySelector('.el-table__body-wrapper tbody');
+            const _this = this;
+            let data = [];
+            Sortable.create(tbody,{
+                draggable: ".el-table__row",
+                onEnd ({ newIndex, oldIndex}){                    
+                    // data = _this.tableData;
+                    //删除并获取拖拽的行
+                    const currrow = _this.tableData.splice(oldIndex, 1)[0]
+                    console.log(_this.tableData)
+                    console.log("wwwww",currrow)
+                    //将拖拽的行新增到指定newIndex位置
+                    _this.tableData.splice(newIndex, 0, currrow)
+                    console.log("ascasca",_this.tableData)
                 }
-               
+            });
+        }, 
+        getData() {   
+            console.log("tpdt")
+            this.project_id = db.getItem('id')
+            this.tableData = []
+            //获得下拉框新增数据
+            get_testPlan_listByProjectId(this.project_id).then(res =>{
+                if(res.data != ""){
+                    this.testApi_options = []
+                    for(let item of res.data){
+                        this.testApi_options.push({
+                        'id': item.id,
+                        'api_name': item.api_name
+                    }) 
+                }
+                }              
             })
             this.query.testplan_id = this.$route.query.id         
             console.log("queret",this.query)
             if(this.query.testplan_id != undefined){
+                //获得列表数据
                 get_testPlan_detail_list(this.query).then(res => {
-                console.log(res);
-                this.tableData = res.data;
-                this.pageTotal = res.count || 50;
+                if(res.data != ""){
+                    this.tableData = res.data;
+                    this.pageTotal = res.count || 50;
+                }
             });
             }
 
@@ -159,7 +190,29 @@ export default {
         // 触发搜索按钮
         handleSearch() {
             this.$set(this.query, 'pageIndex', 1);
-            this.getData();
+            console.log(this.tableData)
+            // this.getData();
+        },
+        update_test_api_group(){
+            let table_data = {
+                'testplan_id':"",
+                'table_data':""
+            }
+            table_data.testplan_id = this.query.testplan_id,
+            table_data.table_data = this.tableData
+            
+            console.log("table_data",table_data)
+            update_test_api_group(table_data).then(res =>{
+                if (res.code === "200") {
+                    this.$message.success(res.msg);
+                    this.getData();
+                }
+                if (res.code === "201") {
+                    this.$message.error(res.msg);
+                    this.getData();
+                }
+            })
+            
         },
         // 删除操作 index代表选行为第几行(从0开始),row代表这一整行的所有数据
         handleDelete(index, row) {
@@ -169,9 +222,10 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
-                    console.log("index",index)
-                    console.log("row",row)
-                    delete_api(row.id).then(res => {
+                    this.testplan_detail.testplan_id = this.query.testplan_id
+                    this.testplan_detail.test_api_id = index
+                    console.log("delete api",this.testplan_detail)
+                    delete_testPlan_detail(this.testplan_detail).then(res => {
                         console.log("resdel",res)
                         if (res.code === "200") {
                             this.$message.success(res.msg);
@@ -179,10 +233,11 @@ export default {
                             this.getData();
                         }
                         if (res.code === "201") {
-                            this.$message.success(res.err_detail);
+                            this.$message.error(res.err_detail);
                             this.getData();
                         }
                     })
+                    console.log("accascasc")
             })
             .catch(() => {});
         },
@@ -206,8 +261,7 @@ export default {
             run_test_api(row.id).then(res =>{
                 console.log("resaaa:",res)
                 this.$message.success(res);
-            })
-            
+            })    
         },
         //新建操作
         addApi() {
@@ -235,7 +289,6 @@ export default {
             if(this.subtype === 'create'){
                 this.testplan_detail.testplan_id = this.query.testplan_id
                 create_testPlan_detail(this.testplan_detail).then(res=>{
-                    console.log(res)
                     if (res.code === "200") {
                         this.$message.success(res.msg);
                         console.log(res);
@@ -257,7 +310,10 @@ export default {
             this.$set(this.query, 'page', val);
             this.getData();
         }
-    }
+    },
+    mounted(){
+        this.rowDrop();
+    },
 };
 </script>
 

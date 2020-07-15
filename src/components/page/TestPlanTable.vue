@@ -117,9 +117,24 @@ export default {
     created() {
         this.getData();
     },
+    watch:
+        {
+            getSearchKey(newVal, oldVal){
+            // console.log("aaaaa111a",newVal,oldVal)
+            this.getData(newVal)
+    }
+    },
+    computed:{
+            getSearchKey(){
+            return this.$store.state.searchKey
+        }
+    },
     methods: {
-        getData() {
-            this.query.project_id = db.getItem('id')
+        getData(newVal) {
+            this.query.project_id = newVal
+            if(newVal === undefined){
+                this.query.project_id = db.getItem('id')
+            }            
             get_testPlan_list(this.query).then(res => {
                 console.log(res);
                 this.tableData = res.data;
@@ -242,7 +257,7 @@ export default {
             this.getData();
         }
     }
-};
+}
 </script>
 
 <style scoped>

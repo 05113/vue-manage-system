@@ -27,6 +27,7 @@
                 ref="multipleTable"
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
+                row-key="id"
             >
                 <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
                 <el-table-column prop="api_name" label="接口名称"></el-table-column>
@@ -46,6 +47,12 @@
                             class="red"
                             @click="handleDelete(scope.$index, scope.row)"
                         >删除1</el-button>
+                        <el-button
+                            type="text"
+                            icon="el-icon-delete"
+                            class="red"
+                            @click="updateApi(scope.$index, scope.row)"
+                        >修改</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -85,6 +92,7 @@ import { run_test_api } from '../../api/test_api';
 import { run_api_list } from '../../api/api';
 import { create_api } from '../../api/api';
 import Base from '../common/Header'
+import Sortable from 'sortablejs';
 const db = window.localStorage
 
 export default {
@@ -120,20 +128,50 @@ export default {
         this.getData();
     },
     methods: {
-        getData() {
-            this.query.project_id = db.getItem("id")
-            console.log("queret",this.project_id)
-            console.log("queret",this.query)
+        rowDrop(){
+            const tbody = document.querySelector('.el-table__body-wrapper tbody');
+            const _this = this;
+            let data = [];
+            Sortable.create(tbody,{
+                draggable: ".el-table__row",
+                onEnd ({ newIndex, oldIndex}){                    
+                    // data = _this.tableData;
+                    //删除并获取拖拽的行
+                    const currrow = _this.tableData.splice(oldIndex, 1)[0]
+                    console.log(_this.tableData)
+                    console.log("wwwww",currrow)
+                    //将拖拽的行新增到指定newIndex位置
+                    _this.tableData.splice(newIndex, 0, currrow)
+                    console.log("ascasca",_this.tableData)
+                    // _this.$$nextTick(function (){
+
+                    // })
+                }
+            });
+        },     
+        getData(id) {
+            // this.query.project_id = db.getItem("id")
+            console.log("queret1",this.query.project_id)
+            this.query.project_id = id
+            if (this.query.project_id === undefined){
+                this.query.project_id = db.getItem("id")
+                // console.log("queret2",this.query.project_id)
+
+            }
+            // console.log("queret",this.query.project_id)
+            // console.log("queret",this.query)
             get_test_api_list(this.query).then(res => {
-                console.log(res);
+                // console.log(res);
                 this.tableData = res.data;
                 this.pageTotal = res.count || 50;
             });
         },
         // 触发搜索按钮
         handleSearch() {
-            this.$set(this.query, 'pageIndex', 1);
-            this.getData();
+            // this.$set(this.query, 'pageIndex', 1);
+            // this.getData();
+            console.log("aaaaaaaaa",this.tableData)
+
         },
         // 删除操作 index代表选行为第几行(从0开始),row代表这一整行的所有数据
         handleDelete(index, row) {
@@ -189,6 +227,15 @@ export default {
             this.api_entity = {}
             this.editVisible = true;
         },
+        updateApi(index,row){
+            this.$router.push({
+                path:'/interface_update',
+                query: {
+                    api_id: row.id
+                    }
+            })
+            
+        },
         // 提交操作
         submitForm() {
             this.editVisible = false;
@@ -229,6 +276,20 @@ export default {
         handlePageChange(val) {
             this.$set(this.query, 'page', val);
             this.getData();
+        }
+    },
+    mounted(){
+        this.rowDrop();
+    },
+    computed: {          
+        getSearchKey(){
+            return this.$store.state.searchKey
+        }
+    },
+    watch:{
+        getSearchKey(newVal, oldVal){
+            console.log("aaaaa111a",newVal,oldVal)
+            this.getData(newVal)
         }
     }
 };

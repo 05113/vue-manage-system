@@ -124,6 +124,7 @@ export default {
         },
         // 触发搜索按钮
         handleSearch() {
+            console.log("wwwww",this.$store.state.searchKey)
             this.$set(this.query, 'pageIndex', 1);
             this.getData();
         },
@@ -219,6 +220,17 @@ export default {
         handlePageChange(val) {
             this.$set(this.query, 'page', val);
             this.getData();
+        }
+    
+    },
+    computed: {          
+        getSearchKey(){
+            return this.$store.state.searchKey
+        }
+    },
+    watch:{
+        getSearchKey(newVal, oldVal){
+            console.log("aaaaaa",newVal,oldVal)
         }
     }
 };

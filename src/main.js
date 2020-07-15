@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import ElementUI from 'element-ui';
 import VueI18n from 'vue-i18n';
+import store from './components/common/bus1.js'
 import { messages } from './components/common/i18n';
 import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 // import './assets/css/theme-green/index.css'; // 浅绿色主题
@@ -42,6 +43,7 @@ router.beforeEach((to, from, next) => {
 });
 
 new Vue({
+    store,
     router,
     i18n,
     render: h => h(App)

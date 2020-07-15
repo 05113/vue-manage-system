@@ -116,6 +116,10 @@
 <script>
 import { get_api_listAll } from '../../api/api';
 import { create_test_api } from '../../api/test_api';
+import { get_test_apiById } from '../../api/test_api';
+import { update_test_api } from '../../api/test_api';
+
+
 import axios from 'axios';
 const db = window.localStorage 
 
@@ -123,6 +127,7 @@ export default {
     name: 'baseform',
     data() {
         return {
+            api_id:"",
             api_options:[],
             enctype_options:[{"key":"application/json","value":"application/json"},{"key":"ccc","value":"mmm"}],
             response_txt:"",
@@ -170,7 +175,91 @@ export default {
   
         };
     },
+    watch:{
+      '$route': 'getData'
+    },
+    created(){
+        this.getData()
+    },
     methods: {
+        getData(){
+            this.getApiOptions()
+            this.api_id = this.$route.query.api_id
+            console.log("api_id",this.api_id)
+            if(this.api_id != undefined){
+                get_test_apiById(this.api_id).then(res =>{
+                    console.log("apibyid",res.data)
+                    this.form.region = res.data[0].api_url
+                    this.form.url = res.data[0].api_url
+                    let enctype = res.data[0].enctype
+                    if(enctype === 'application/json'){
+                        this.form.resource = 'raw'
+                        this.form.enctype = enctype
+                        this.form.select_flag = false
+                    }
+                    this.form.request_json = res.data[0].request_json
+                    let assert_case = eval(res.data[0].assert_case)
+                    this.form.assert = []
+                    for(let item of assert_case){
+                        console.log("item",item)
+                        this.form.assert.push({
+                            "index":item.index,
+                            "key":item.key,
+                            "comparison_operator":item.comparison_operator,
+                            "assert_value":item.assert_value,
+                            "actually_vaule":item.actually_vaule,
+                            "logical_operator":item.logical_operator
+                        })
+                    }
+                    let data_out = res.data[0].data_out
+                    if(data_out != null && data_out != ''){
+                        this.form.data_out_switch = true
+                        this.form.data_out = data_out
+                    }
+
+                    
+                })
+
+            }else{
+                this.form =  {
+                    data_out:"",
+                    data_out_switch: false,
+                    select_flag: true,
+                    enctype:'',
+                    host: '',
+                    region: '',
+                    url:'',
+                    project_id: '',
+                    date2: '',
+                    delivery: true,
+                    resource: '',
+                    request_json: '',
+                    options: [],
+                    FormArr:[
+                        {
+                            index:0,
+                            key:"",
+                            value:""
+                        },
+                        {
+                            index:1,
+                            key:"",
+                            value:""
+                        }
+                    ],
+                assert:[
+                    {
+                        index:0,
+                        key:"",
+                        comparison_operator:"",
+                        assert_value:'',
+                        actually_vaule:'',
+                        logical_operator:''
+                    }
+                ]
+            }
+            }
+        },
 
         aa(){
             this.form.url = this.form.region
@@ -367,11 +456,12 @@ export default {
             
         },
         onSubmit() {
-            this.form.project_id = db.getItem('id')
-            create_test_api(this.form).then(res =>{
-                
+            this.form.test_api_id = this.api_id
+            update_test_api(this.form).then(res =>{
+                if(res.code ==='200')
+                this.$message.success('提交成功！');
             })
-            this.$message.success('提交成功！');
+            
         },
     }
 };

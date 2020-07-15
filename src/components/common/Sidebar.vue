@@ -61,16 +61,16 @@ export default {
                     index: 'dashboard',
                     title: '系统首页'
                 },
-                {
-                    icon: 'el-icon-lx-cascades',
-                    index: 'table',
-                    title: '基础表格'
-                },
-                {
-                    icon: 'el-icon-lx-copy',
-                    index: 'tabs',
-                    title: 'tab选项卡'
-                },
+                // {
+                //     icon: 'el-icon-lx-cascades',
+                //     index: 'table',
+                //     title: '基础表格'
+                // },
+                // {
+                //     icon: 'el-icon-lx-copy',
+                //     index: 'tabs',
+                //     title: 'tab选项卡'
+                // },
                 {
                     icon: 'el-icon-lx-calendar',
                     index: '5',
@@ -84,11 +84,13 @@ export default {
                         {
                             index:'api',
                             title:'api管理'
-                        },
-                        {
-                            index: 'form',
-                            title: '基本表单'
-                        },
+                        }
+                        ]
+                },
+                        // {
+                        //     index: 'form',
+                        //     title: '基本表单'
+                        // },
                         // {
                         //     index: '3-2',
                         //     title: '三级菜单',
@@ -103,17 +105,17 @@ export default {
                         //         }
                         //     ]
                         // },
-                        {
-                            index: 'upload',
-                            title: '文件上传'
-                        }
-                    ]
-                },
-                {
-                    icon: 'el-icon-lx-emoji',
-                    index: 'icon',
-                    title: '自定义图标'
-                },
+                //         {
+                //             index: 'upload',
+                //             title: '文件上传'
+                //         }
+                //     ]
+                // },
+                // {
+                //     icon: 'el-icon-lx-emoji',
+                //     index: 'icon',
+                //     title: '自定义图标'
+                // },
                 {
                     icon: 'el-icon-pie-chart',
                     index: '2',
@@ -128,21 +130,21 @@ export default {
                         }
                     ]
                 },
-                {
-                    icon: 'el-icon-rank',
-                    index: '9',
-                    title: '拖拽组件',
-                    subs: [
-                        {
-                            index: 'drag',
-                            title: '拖拽列表'
-                        },
-                        {
-                            index: 'dialog',
-                            title: '拖拽弹框'
-                        }
-                    ]
-                },
+                // {
+                //     icon: 'el-icon-rank',
+                //     index: '9',
+                //     title: '拖拽组件',
+                //     subs: [
+                //         {
+                //             index: 'drag',
+                //             title: '拖拽列表'
+                //         },
+                //         {
+                //             index: 'dialog',
+                //             title: '拖拽弹框'
+                //         }
+                //     ]
+                // },
                 {
                     icon: 'el-icon-lx-global',
                     index: '4',
@@ -154,7 +156,8 @@ export default {
                         },{
                             index:'interface_create',
                             title:'接口创建'
-                        },{
+                        },
+                        {
                             index:'interface_update',
                             title:'接口修改'
                         }
@@ -172,33 +175,34 @@ export default {
                         },{
                             index:'testPlan_create',
                             title:'计划创建'
-                        },{
-                            index:'testPlan_update',
-                            title:'计划修改'
-                        }
+                        },
+                        // {
+                        //     index:'testPlan_update',
+                        //     title:'计划修改'
+                        // }
                     ]
                     
                 },
-                {
-                    icon: 'el-icon-lx-warn',
-                    index: '7',
-                    title: '错误处理',
-                    subs: [
-                        {
-                            index: 'permission',
-                            title: '权限测试'
-                        },
-                        {
-                            index: '404',
-                            title: '404页面'
-                        }
-                    ]
-                },
-                {
-                    icon: 'el-icon-lx-redpacket_fill',
-                    index: '/donate',
-                    title: '支持作者'
-                }
+                // {
+                //     icon: 'el-icon-lx-warn',
+                //     index: '7',
+                //     title: '错误处理',
+                //     subs: [
+                //         {
+                //             index: 'permission',
+                //             title: '权限测试'
+                //         },
+                //         {
+                //             index: '404',
+                //             title: '404页面'
+                //         }
+                //     ]
+                // },
+                // {
+                //     icon: 'el-icon-lx-redpacket_fill',
+                //     index: '/donate',
+                //     title: '支持作者'
+                // }
             ]
         };
     },
