@@ -64,11 +64,11 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/ApiTable.vue'),
                     meta: { title: 'api管理' }
                 },
-                // {
-                //     path: '/tabs',
-                //     component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
-                //     meta: { title: 'tab选项卡' }
-                // },
+                {
+                    path: '/test',
+                    component: () => import(/* webpackChunkName: "tabs" */ '../components/page/TestCase.vue'),
+                    meta: { title: 'test' }
+                },
                 // {
                 //     path: '/form',
                 //     component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),

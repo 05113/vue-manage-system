@@ -192,7 +192,7 @@ export default {
             this.$message.error(`删除了${str}`);
             this.multipleSelection = [];
         },
-        // 编辑操作
+        // 测试计划详情
         testPlan_detail(index, row) {
             console.log(row.id)
             
@@ -202,11 +202,6 @@ export default {
                     id: row.id
                     }
             })
-            // this.subtype = 'edit'
-            // this.idx = index;
-            // this.testPlan_entity = row;
-            // this.editVisible = true;
-
         },
         //新建操作
         addApi() {

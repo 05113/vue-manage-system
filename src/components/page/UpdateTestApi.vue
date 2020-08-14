@@ -51,26 +51,6 @@
                         <el-button type="primary" @click="eee">确定</el-button>
                         <el-button>取消</el-button>
                     </el-form-item>
-
-                    <!-- <el-form-item label="日期时间">
-                        <el-col :span="11">
-                            <el-date-picker
-                                type="date"
-                                placeholder="选择日期"
-                                v-model="form.date1"
-                                value-format="yyyy-MM-dd"
-                                style="width: 100%;"
-                            ></el-date-picker>
-                        </el-col>
-                        <el-col class="line" :span="2">-</el-col>
-                        <el-col :span="11">
-                            <el-time-picker
-                                placeholder="选择时间"
-                                v-model="form.date2"
-                                style="width: 100%;"
-                            ></el-time-picker>
-                        </el-col>
-                    </el-form-item> -->
                     <el-form-item label="断言开关">
                         <el-switch v-model="form.delivery"></el-switch>
                     </el-form-item>

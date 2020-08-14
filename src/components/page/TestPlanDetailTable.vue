@@ -133,12 +133,6 @@ export default {
       '$route': 'getData'
     },
     methods: {
-        // getParams(){
-        //     // const routerParams = this.$route.testplan.id
-        //     const routerParams = this.$route.query.id
-        //     this.query.testplan_id = routerParams
-        //     console.log("aaaaaa",routerParams)
-        // },
         //新增 获取projectid
         rowDrop(){
             const tbody = document.querySelector('.el-table__body-wrapper tbody');
@@ -150,16 +144,12 @@ export default {
                     // data = _this.tableData;
                     //删除并获取拖拽的行
                     const currrow = _this.tableData.splice(oldIndex, 1)[0]
-                    console.log(_this.tableData)
-                    console.log("wwwww",currrow)
                     //将拖拽的行新增到指定newIndex位置
                     _this.tableData.splice(newIndex, 0, currrow)
-                    console.log("ascasca",_this.tableData)
                 }
             });
         }, 
         getData() {   
-            console.log("tpdt")
             this.project_id = db.getItem('id')
             this.tableData = []
             //获得下拉框新增数据

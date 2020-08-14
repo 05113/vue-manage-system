@@ -111,11 +111,11 @@ export default {
                 //         }
                 //     ]
                 // },
-                // {
-                //     icon: 'el-icon-lx-emoji',
-                //     index: 'icon',
-                //     title: '自定义图标'
-                // },
+                {
+                    icon: 'el-icon-lx-emoji',
+                    index: 'test',
+                    title: 'test'
+                },
                 {
                     icon: 'el-icon-pie-chart',
                     index: '2',
@@ -234,7 +234,7 @@ export default {
     width: 0;
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
+    width: 220px;
 }
 .sidebar > ul {
     height: 100%;
