@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="container" style="display:flex">
-            <div style="display:inline-block;margin-left:10px;">
+            <div style="display:inline-block;margin-left:10px;width:520px">
                 <div>
                     <el-select v-model="branch" @change="getPathTree">
                         <el-option
@@ -10,7 +10,6 @@
                             :value="item.value"
                         ></el-option>
                     </el-select>
-                    <el-button></el-button>
                 </div>
                 <el-tree
                     :data="data"
@@ -20,35 +19,31 @@
                     ref="tree"
                     highlight-current
                     :props="defaultProps"
+                    @node-click="handleCheckChange"
                 ></el-tree>
-                <el-button @click="getCheckedNodes">通过 node 获取</el-button>
-                <el-button @click="getCheckedKeys">通过 key 获取</el-button>
-                <el-button @click="setCheckedNodes">通过 node 设置</el-button>
-                <el-button @click="setCheckedKeys">通过 key 设置</el-button>
-                <el-button @click="resetChecked">空</el-button>
+                <div style="margin-left:100px;">
+                    <el-button @click="getCheckedNodes" style="">添 加 到 右 侧</el-button>
+                    <el-button @click="setCheckedKeys">清空</el-button>
+                </div>
             </div>
             <div style="display:inline-block;margin-left:50px;">
-                <el-table :data="testPlan.tableData" style="width: 100%">
+                <el-table :data="testPlan.tableData" style="width: 100%" border>
                     <el-table-column prop="label" label="文件名称" width="180" align="center"></el-table-column>
                     <el-table-column prop="filepath" label="文件路径" width="180"></el-table-column>
                     <el-table-column prop="caozuo" label="操作" width="150" align="center">
                         <template slot-scope="scope">
                             <el-button
                                 type="text"
-                                icon="el-icon-edit"
-                                @click="run_api(scope.$index, scope.row)"
-                            >run</el-button>
-                            <el-button
-                                type="text"
                                 icon="el-icon-delete"
                                 class="red"
                                 @click="handleDelete(scope.$index, scope.row)"
-                            >删除1</el-button>
+                            >删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="float:right">
-                    <el-button type="primary" size="medium" @click="addPlan">保存</el-button>
+                    <el-button type="primary" icon="el-icon-check"  round size="medium" @click="addPlan">保存</el-button>
+                    <el-button type="danger" icon="el-icon-delete"  round size="medium" @click="cancelData">清空</el-button>
                 </div>
                 <el-dialog
                     title="subtype"
@@ -112,10 +107,42 @@ export default {
         }
     },
     methods: {
+        handleCheckChange(obj){
+            console.log(obj)
+            let res = this.$refs.tree.getCheckedNodes()
+            console.log(res)
+
+        },
+        handleDelete(index, row){
+            console.log(index,row)
+            this.testPlan.tableData.splice(index,1)
+            this.$refs.tree.setChecked(row.id,false,false)
+        },
+        cancelData(){
+            this.$confirm('确定要删除吗？', '提示', {
+                type: 'warning'
+            }).then(()=>{
+                this.testPlan.tableData = []
+                this.$refs.tree.setCheckedKeys([])
+                }            
+            )
+            .catch(() => {});
+
+            
+        },
         submitData() {
             console.log(this.testPlan);
             add_case_test_plan(this.testPlan).then((res =>{
                 console.log(res)
+                if(res.code === '200'){
+                    this.$message.success(res.message)
+                    this.testPlan.tableData = []
+                    this.$refs.tree.setCheckedKeys([])
+                    this.testPlan.testPlan_name = ''
+                }else{
+                    this.$message.error(res.message)
+                }
+                this.dialogVisible = false
             }))
 
         },
@@ -124,6 +151,7 @@ export default {
         },
         getData(newVal) {
             this.testPlan.project_id = newVal;
+            this.testPlan.tableData = [];
             if (newVal === undefined) {
                 this.testPlan.project_id = db.getItem('id');
             }
@@ -147,16 +175,20 @@ export default {
         getCheckedNodes() {
             console.log(this.$refs.tree.getCheckedNodes());
             let checkNodes = this.$refs.tree.getCheckedNodes();
-            this.testPlan.tableData = [];
+            this.testPlan.tableData = []
             for (let item of checkNodes) {
                 if (item.filepath != undefined) {
                     this.testPlan.tableData.push({
+                        id:item.id,
                         filepath: item.filepath,
                         label: item.label
                     });
                 }
 
             }
+        },
+        setChecked(){
+            this.$refs.tree.setChecked(1,true,false)
         },
         getCheckedKeys() {
             console.log(this.$refs.tree.getCheckedKeys());
@@ -174,7 +206,7 @@ export default {
             ]);
         },
         setCheckedKeys() {
-            this.$refs.tree.setCheckedKeys([3]);
+            this.$refs.tree.setCheckedKeys([1]);
         },
         resetChecked() {
             this.$refs.tree.setCheckedKeys([]);

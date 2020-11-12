@@ -28,3 +28,17 @@ export const run_test_api = id =>{
         data:id
     }) 
 }
+export const get_single_out_data = project_id =>{
+    return request({
+        url:'/get_single_out_data',
+        method :'post',
+        data:project_id
+    })
+}
+export const update_single_out_data = data_out =>{
+    return request({
+        url:'/update_single_out_data',
+        method :'post',
+        data:data_out
+    })
+}

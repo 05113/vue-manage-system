@@ -116,6 +116,7 @@
 <script>
 import { get_api_listAll } from '../../api/api';
 import { create_test_api } from '../../api/test_api';
+
 import axios from 'axios';
 const db = window.localStorage 
 
@@ -332,6 +333,10 @@ export default {
             // })
             axios(a).then(res =>{
                 this.response_txt = JSON.stringify(res.data)
+            })
+            .catch((error)=>{
+                this.$message.error("请求错误,请假查URL");
+                // console.log(error)
             })
             },
         get_jsonValue(key,json_object){

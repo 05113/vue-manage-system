@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button type="primary" size="medium" @click="addApi">新增接口</el-button>
+                <el-button type="primary" size="medium" @click="addApi">显示参数</el-button>
                 <div class="handle-box1">
                     <el-input
                         v-model="queryName"
@@ -34,6 +34,7 @@
                 <el-table-column prop="api_url" label="接口url"></el-table-column>
                 <el-table-column prop="request_json" label="request_json"></el-table-column>
                 <el-table-column prop="assert_case" label="assert_case"></el-table-column>
+                <el-table-column prop="data_out" label="data_out"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -69,28 +70,38 @@
         </div>
 
         <!-- 编辑弹出框 -->
-        <!-- <el-dialog :title= subtype :visible.sync="editVisible" width="30%">
-            <el-form ref="api_entity" :model="api_entity" label-width="70px">
-                <el-form-item label="接口名称">
-                    <el-input v-model="api_entity.api_name"></el-input>
-                </el-form-item>
-                <el-form-item label="接口url">
-                    <el-input v-model="api_entity.api_url"></el-input>
-                </el-form-item>
-            </el-form>
+        <el-dialog :title= subtype :visible.sync="editVisible" width="30%">
+            <el-row v-for="item in data_out" span= "12" type="flex" justify="center" style="margin-top:5px">
+                <el-col :span = 4>
+                    <el-input  v-model="item.data_out_key"></el-input>
+                </el-col>
+                <el-col :span = 4  >
+                    <p align="center">=</p>
+                </el-col>
+                <el-col :span = 4 >
+                    <el-input  v-model="item.data_out_value"></el-input>
+                </el-col>
+            </el-row>
             <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="addDataOut">新 增</el-button>
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm">确 定</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>               
             </span>
-        </el-dialog> -->
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import { get_test_api_list } from '../../api/interface';
 import { run_test_api } from '../../api/test_api';
+import { get_single_out_data } from '../../api/test_api';
+import { update_single_out_data } from '../../api/test_api';
+
+
 import { run_api_list } from '../../api/api';
 import { create_api } from '../../api/api';
+
+
 import Base from '../common/Header'
 import Sortable from 'sortablejs';
 const db = window.localStorage
@@ -117,9 +128,15 @@ export default {
                 api_name:"",
                 api_url:"",
                 request_json:"",
-                assert_case:""
+                assert_case:"",
+                data_out:""
 
             },
+            data_out:[],
+            // {
+            //     data_out_key:"",
+            //     data_out_value:""
+            // },
             idx: -1,
             id: -1,
         };
@@ -128,6 +145,12 @@ export default {
         this.getData();
     },
     methods: {
+        addDataOut(){
+            this.data_out.push({
+                "data_out_key":"",
+                "data_out_value":""
+            })
+        },
         rowDrop(){
             const tbody = document.querySelector('.el-table__body-wrapper tbody');
             const _this = this;
@@ -151,7 +174,7 @@ export default {
         },     
         getData(id) {
             // this.query.project_id = db.getItem("id")
-            console.log("queret1",this.query.project_id)
+            // console.log("queret1",this.query.project_id)
             this.query.project_id = id
             if (this.query.project_id === undefined){
                 this.query.project_id = db.getItem("id")
@@ -213,19 +236,45 @@ export default {
             this.multipleSelection = [];
         },
         // run
+        
         run_api(index, row) {
-            console.log("wor",row.id)
-            run_test_api(row.id).then(res =>{
+            // console.log("wor",row.id)
+            run_test_api(row.id).then(async res =>{
                 console.log("resaaa:",res)
-                this.$message.success(res);
+                if(res.assert_words === 'Faild'){
+                    this.$message.error('接口执行失败，请检查请求体')
+                }else{
+                    if(res.assert_words === 'False'){
+                        await this.$message.error('返回与预期结果不一致')
+                    }
+                    else{
+                        await this.$message.success('返回与预期结果一致')
+                    }
+                }
+                if(res.match_detail.msg === 'False'){
+                    // console.log(res.match_detail.value)
+                    this.$message.warning('出参存在问题 :value = '+res.match_detail.value);
+                }
             })
             
         },
         //新建操作
         addApi() {
-            this.subtype = 'create'
+            this.subtype = '参数列表'
             this.api_entity = {}
             this.editVisible = true;
+            this.data_out = []
+            get_single_out_data(this.query.project_id).then(res =>{
+                console.log(res)
+                for(let item in res){
+                    this.data_out.push({
+                        "data_out_key":item,
+                        "data_out_value":res[item]
+                    })
+                }
+                console.log(this.data_out)
+            })
+            
         },
         updateApi(index,row){
             this.$router.push({
@@ -239,6 +288,11 @@ export default {
         // 提交操作
         submitForm() {
             this.editVisible = false;
+            console.log(this.data_out)
+            update_single_out_data(this.data_out).then(res =>{
+                console.log(res)
+
+            })
             if(this.subtype === 'edit'){
                 update_api(this.api_entity).then(res=>{
                     console.log(res)

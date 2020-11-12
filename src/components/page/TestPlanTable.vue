@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-button type="primary" size="medium" @click="addApi">新增接口</el-button>
+                <el-button type="primary" size="medium" @click="addApi">新增计划</el-button>
                 <div class="handle-box1">
                     <el-input
                         v-model="queryName"
@@ -17,6 +17,7 @@
                         class="handle-input mr10"
                         @keyup.native="number"
                     ></el-input>
+                        <div><button @click="testSocket">发消息</button></div>
                     <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                 </div>
             </div>
@@ -94,6 +95,8 @@ export default {
     name: 'basetable',
     data() {
         return {
+            path:"ws://192.168.0.200:8005/qrCodePage/ID=1/refreshTime=5",
+            websock:null,
             query: {
                 page: 1,
                 limit: 10
@@ -117,6 +120,9 @@ export default {
     created() {
         this.getData();
     },
+    destroyed() {
+      this.websock.onclose() //离开路由之后断开websocket连接
+    },
     watch:
         {
             getSearchKey(newVal, oldVal){
@@ -130,6 +136,45 @@ export default {
         }
     },
     methods: {
+        testSocket(){
+            
+            console.log(this.websock)
+            this.initWebSocket()
+            console.log("aaaammmmmmmmmmm")
+        },
+        initWebSocket(){
+            const wsuri = "ws://127.0.0.1:9995/task_status";
+            this.websock = new WebSocket(wsuri);
+            this.websock.onmessage = this.websocketonmessage;
+            this.websock.onopen = this.websocketonopen;
+            this.websock.onerror = this.websocketonerror;
+            this.websock.onclose = this.websocketclose;
+        },
+        websocketonopen(){ //连接建立之后执行send方法发送数据
+            console.log("aaaaa")
+            // let actions = {"test":"12345"};
+            // this.websocketsend(JSON.stringify(actions));
+            console.log("111")
+        },
+        websocketonerror(){//连接建立失败重连
+            console.log("2")
+            // alert('连接后台失败')
+            this.initWebSocket();
+            
+        },
+        websocketonmessage(e){ //数据接收
+            // console.log("3")
+            const redata = JSON.parse(e.data);
+            console.log(redata)
+        },
+        websocketsend(Data){//数据发送
+            console.log("4")
+            this.websock.send(Data);
+        },
+        websocketclose(e){  //关闭
+            console.log("5")
+            console.log('断开连接',e);
+        },
         getData(newVal) {
             this.query.project_id = newVal
             if(newVal === undefined){
